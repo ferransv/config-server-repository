@@ -1,3 +1,6 @@
+#server:
+#  port: 8080
+
 twitter-to-kafka-service:
   twitter-keywords:
     - Java
@@ -5,7 +8,7 @@ twitter-to-kafka-service:
     - Kafka
     - Elasticsearch
   welcome-message: Hello microservices!
-  enable-mock-tweets: false #!!!!
+  enable-mock-tweets: false
   mock-min-tweet-length: 5
   mock-max-tweet-length: 15
   mock-sleep-ms: 10000
@@ -30,10 +33,11 @@ kafka-config:
 kafka-producer-config:
   key-serializer-class: org.apache.kafka.common.serialization.LongSerializer
   value-serializer-class: io.confluent.kafka.serializers.KafkaAvroSerializer
-  compression-type: snappy
-  acks: all
+  compression-type: snappy #For compression, we chose Snappy among options GZIP None, LZ4.
+  #Snappy is a compression library from Google, and it is faster than other options, but it provides less compression to accomplish this.
+  acks: all  #we choose all because we want to get acknowledgments from all replicas to be more resilient
   batch-size: 16384
   batch-size-boost-factor: 100
-  linger-ms: 5
-  request-timeout-ms: 60000
-  retry-count: 5
+  linger-ms: 5 #added a delay to producer client to wait before sending the records and send more data at once.
+  request-timeout-ms: 60000 #after 60 seconds, if no acknowledgement comes, producer will throw timeout error
+  retry-count: 5 # producer will retry five times in case of error
