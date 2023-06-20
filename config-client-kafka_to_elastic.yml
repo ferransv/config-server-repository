@@ -46,4 +46,4 @@ elastic-config:
   connection-url: http://localhost:9200
   connect-timeout-ms: 5000
   socket-timeout-ms: 30000
-  is-repository: true
+  is-repository: true #when true -> use the practical ElasticsearchRepository instead the more complex but also more specific ElasticsearchOperations.

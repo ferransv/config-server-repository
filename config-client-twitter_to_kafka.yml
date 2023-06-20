@@ -8,7 +8,7 @@ twitter-to-kafka-service:
     - Kafka
     - Elasticsearch
   welcome-message: Hello microservices!
-  enable-mock-tweets: false
+  enable-mock-tweets: true #!!!
   mock-min-tweet-length: 5
   mock-max-tweet-length: 15
   mock-sleep-ms: 10000
@@ -36,8 +36,9 @@ kafka-producer-config:
   compression-type: snappy #For compression, we chose Snappy among options GZIP None, LZ4.
   #Snappy is a compression library from Google, and it is faster than other options, but it provides less compression to accomplish this.
   acks: all  #we choose all because we want to get acknowledgments from all replicas to be more resilient
-  batch-size: 16384
+  batch-size: 16384 #When multiple records are sent to the same partition, the producer will batch them together.
+                    #This parameter controls the amount of memory in bytes that will be used for each batch.
   batch-size-boost-factor: 100
-  linger-ms: 5 #added a delay to producer client to wait before sending the records and send more data at once.
+  linger-ms: 5 #added a delay to producer client to wait before sending the records in a batch (sending more data at once).
   request-timeout-ms: 60000 #after 60 seconds, if no acknowledgement comes, producer will throw timeout error
   retry-count: 5 # producer will retry five times in case of error
